@@ -1,0 +1,6 @@
+node_modules/
+dist/
+backend/storage/*.jsonl
+backend/storage/incidents.json
+*.log
+.DS_Store
