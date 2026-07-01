@@ -46,14 +46,6 @@ export function fuseZone(zoneId, sensors) {
   };
 }
 
-export function fuseAll(sensors) {
-  const fused = {};
-  for (const zoneId of Object.keys(sensors)) {
-    fused[zoneId] = fuseZone(zoneId, sensors);
-  }
-  return fused;
-}
-
 function clamp01(v) {
   return Math.max(0, Math.min(1, v));
 }

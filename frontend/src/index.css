@@ -63,6 +63,23 @@ body {
   margin-bottom: 16px;
 }
 
+.panel-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tick-badge {
+  font-size: 11px;
+  font-family: monospace;
+  color: #868e96;
+  background: #0f1115;
+  border: 1px solid #2b2f36;
+  border-radius: 10px;
+  padding: 2px 8px;
+  margin-bottom: 12px;
+}
+
 .panel h2 {
   font-size: 15px;
   text-transform: uppercase;
@@ -263,6 +280,10 @@ body {
 
 .badge-selected {
   background: #2f9e44;
+}
+
+.badge-escalated {
+  background: #c92a2a;
 }
 
 .plan-viewer {

@@ -12,6 +12,7 @@ const HAZARD_EXPOSURE_BY_STRATEGY = {
   silent_security_response: 0.1,
   deterrent: 0.15,
   medical_response: 0.05,
+  ems_escalation: 0.02,
 };
 
 const EVAC_TIME_SEC_BY_STRATEGY = {
@@ -22,17 +23,20 @@ const EVAC_TIME_SEC_BY_STRATEGY = {
   silent_security_response: 30,
   deterrent: 30,
   medical_response: 60,
+  ems_escalation: 30,
 };
 
 export function simulatePlans(plans, riskAssessment, sensors) {
-  const { zoneId, severityScore } = riskAssessment;
+  const { zoneId, severityScore, affectedZones } = riskAssessment;
+  const hazardZones = affectedZones && affectedZones.length ? affectedZones : [zoneId];
 
   const scored = plans.map((plan) => {
-    const exposureAtHazard = sensors[zoneId]?.occupancy ?? 0;
-    const neighborOccupancy = (ADJACENCY[zoneId] || []).reduce(
-      (sum, z) => sum + (sensors[z]?.occupancy ?? 0),
-      0
-    );
+    const exposureAtHazard = hazardZones.reduce((sum, z) => sum + (sensors[z]?.occupancy ?? 0), 0);
+    const neighborSet = new Set();
+    for (const hz of hazardZones) {
+      for (const n of ADJACENCY[hz] || []) if (!hazardZones.includes(n)) neighborSet.add(n);
+    }
+    const neighborOccupancy = [...neighborSet].reduce((sum, z) => sum + (sensors[z]?.occupancy ?? 0), 0);
 
     const baseExposure = HAZARD_EXPOSURE_BY_STRATEGY[plan.strategy] ?? 0.4;
     const severityAdjustedExposure = Math.min(1, baseExposure * (0.6 + severityScore * 0.6));

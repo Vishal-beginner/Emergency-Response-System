@@ -3,7 +3,7 @@ import cors from "cors";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
 import { router } from "./routes/api.js";
-import { bus, getFullState } from "./pipeline/incidentManager.js";
+import { bus, getFullState, startClock } from "./pipeline/incidentManager.js";
 
 const PORT = process.env.PORT || 4000;
 
@@ -31,4 +31,6 @@ bus.on("notifications", (notifications) => {
 
 httpServer.listen(PORT, () => {
   console.log(`Emergency Response System backend listening on port ${PORT}`);
+  startClock();
+  console.log(`Closed-loop tick running every ${process.env.TICK_INTERVAL_MS || 4000}ms`);
 });

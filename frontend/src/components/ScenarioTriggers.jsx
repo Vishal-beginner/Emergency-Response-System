@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { INCIDENT_LABELS } from "../utils";
 
 const SCENARIO_LABELS = {
   fire: "🔥 Fire",
@@ -8,6 +7,7 @@ const SCENARIO_LABELS = {
   armed_intruder: "🔫 Armed Intruder",
   fall: "🧍 Fall Detected",
   panic_button: "🆘 Panic Button",
+  recovery: "✅ Recovery Signal (fall)",
 };
 
 export default function ScenarioTriggers({ zones, scenarios, onTrigger, busy }) {

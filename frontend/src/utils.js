@@ -5,14 +5,6 @@ export const SEVERITY_COLORS = {
   critical: "#c92a2a",
 };
 
-export const INCIDENT_LABELS = {
-  fire: "Fire",
-  gas_leak: "Gas Leak",
-  armed_intruder: "Armed Intruder",
-  burglary: "Burglary",
-  fall: "Fall / Medical",
-};
-
 export function formatTime(iso) {
   if (!iso) return "";
   const d = new Date(iso);
@@ -20,19 +12,18 @@ export function formatTime(iso) {
 }
 
 export function zoneHazardLevel(zoneId, incidents) {
-  const relevant = incidents.filter(
-    (inc) => inc.status !== "resolved" && (inc.zoneId === zoneId || inc.plans?.some((p) => p.avoidZones?.includes(zoneId)))
-  );
-  if (relevant.some((inc) => inc.zoneId === zoneId)) {
-    const inc = relevant.find((i) => i.zoneId === zoneId);
-    return inc.severityLevel;
-  }
-  const evacuating = incidents.find(
-    (inc) =>
-      inc.status !== "resolved" &&
-      inc.chosenPlanId &&
-      inc.plans.find((p) => p.id === inc.chosenPlanId)?.evacuationZones?.includes(zoneId)
+  const open = incidents.filter((inc) => inc.status !== "resolved" && inc.status !== "rejected");
+
+  const hazardIncident = open.find((inc) => (inc.affectedZones ?? [inc.zoneId]).includes(zoneId));
+  if (hazardIncident) return hazardIncident.severityLevel;
+
+  const predicted = open.find((inc) => inc.predictedDestination === zoneId);
+  if (predicted) return "predicted";
+
+  const evacuating = open.find((inc) =>
+    inc.chosenPlanId && inc.plans.find((p) => p.id === inc.chosenPlanId)?.evacuationZones?.includes(zoneId)
   );
   if (evacuating) return "evacuating";
+
   return "normal";
 }

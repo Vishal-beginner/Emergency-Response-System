@@ -3,15 +3,19 @@ import { SEVERITY_COLORS, zoneHazardLevel } from "../utils";
 const STATUS_COLORS = {
   normal: "#343a40",
   evacuating: "#1971c2",
+  predicted: "#ae3ec9",
   ...SEVERITY_COLORS,
 };
 
-export default function BuildingMap({ zones, incidents, selectedZone, onSelectZone }) {
+export default function BuildingMap({ zones, incidents, selectedZone, onSelectZone, tick }) {
   const floors = [...new Set(zones.map((z) => z.floor))].sort();
 
   return (
     <div className="panel">
-      <h2>Building Map</h2>
+      <div className="panel-header-row">
+        <h2>Building Map</h2>
+        {tick > 0 && <span className="tick-badge" title="Closed-loop tick count">tick {tick}</span>}
+      </div>
       {floors.map((floor) => (
         <div key={floor} className="floor-row">
           <div className="floor-label">Floor {floor}</div>

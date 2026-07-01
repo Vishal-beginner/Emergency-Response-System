@@ -11,7 +11,7 @@ import AuditTimeline from "./components/AuditTimeline";
 export default function App() {
   const [zones, setZones] = useState([]);
   const [scenarios, setScenarios] = useState([]);
-  const [state, setState] = useState({ sensors: {}, devices: {}, incidents: [], notifications: [] });
+  const [state, setState] = useState({ sensors: {}, devices: {}, incidents: [], notifications: [], tick: 0 });
   const [selectedZone, setSelectedZone] = useState(null);
   const [connected, setConnected] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -73,6 +73,7 @@ export default function App() {
             incidents={state.incidents}
             selectedZone={selectedZone}
             onSelectZone={setSelectedZone}
+            tick={state.tick}
           />
           <SensorPanel zones={zones} sensors={state.sensors} selectedZone={selectedZone} />
         </div>

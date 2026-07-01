@@ -3,16 +3,18 @@ import { getAuditLog } from "../api";
 import { formatTime } from "../utils";
 
 const STAGE_LABELS = {
-  sensor_ingestion: "Sensor Ingestion",
+  sensor_ingestion: "Observe",
+  observe: "Observe",
   detection: "Threat Detection",
   classification: "Classification",
   risk_assessment: "Risk Assessment",
-  planning: "AI Planning",
+  detect_change: "Detect Change",
+  planning: "Plan",
   approval: "Action Approval",
-  device_orchestration: "Device Orchestration",
+  device_orchestration: "Execute",
+  monitor: "Monitor",
   occupant_guidance: "Occupant Guidance",
   notification: "Notification",
-  feedback: "Continuous Feedback",
   incident_closure: "Incident Closure",
 };
 

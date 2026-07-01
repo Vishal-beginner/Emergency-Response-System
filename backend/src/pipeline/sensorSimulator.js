@@ -33,6 +33,10 @@ const SCENARIOS = {
   panic_button: (zoneId) => ({
     panicButton: true,
   }),
+  recovery: (zoneId) => ({
+    uwbStationarySec: 0,
+    motion: true,
+  }),
 };
 
 export function listScenarios() {
@@ -58,6 +62,19 @@ export function triggerScenario(scenarioKey, zoneId) {
   }
   zone.updatedAt = new Date().toISOString();
   return readings;
+}
+
+/**
+ * Apply a raw channel patch to a zone's sensors, bypassing the named-scenario
+ * lookup. Used by the closed-loop tick engine (hazardDynamics) to evolve
+ * sensor readings between operator-triggered scenarios -- e.g. fire growth,
+ * gas dispersion, or a moving intruder's coordinates.
+ */
+export function applyPatch(zoneId, patch) {
+  const zone = sensorState[zoneId];
+  if (!zone) return;
+  Object.assign(zone, patch);
+  zone.updatedAt = new Date().toISOString();
 }
 
 /** Reset a zone's sensors back to baseline (used after incident closure). */

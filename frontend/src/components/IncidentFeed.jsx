@@ -38,6 +38,7 @@ export default function IncidentFeed({ incidents, zones, onApprove, onReject, on
                     {incident.severityLevel.toUpperCase()}
                   </span>
                   <span className="badge badge-status">{STATUS_LABELS[incident.status]}</span>
+                  {incident.escalatedToEMS && <span className="badge badge-escalated">AUTO-ESCALATED TO EMS</span>}
                 </div>
                 <div className="muted small">
                   v{incident.version} · {formatTime(incident.createdAt)}
@@ -45,6 +46,16 @@ export default function IncidentFeed({ incidents, zones, onApprove, onReject, on
               </div>
               <p className="small">{incident.rationale}</p>
               <p className="small muted">Confidence: {(incident.confidence * 100).toFixed(0)}%</p>
+              {incident.affectedZones?.length > 1 && (
+                <p className="small muted">
+                  Hazard footprint: {incident.affectedZones.map((z) => zones.find((zz) => zz.id === z)?.name || z).join(", ")}
+                </p>
+              )}
+              {incident.predictedDestination && (
+                <p className="small muted">
+                  Predicted destination: {zones.find((z) => z.id === incident.predictedDestination)?.name || incident.predictedDestination}
+                </p>
+              )}
 
               {(incident.status === "pending_approval" || incident.status === "active") && (
                 <PlanViewer incident={incident} onApprove={(planId) => onApprove(incident.id, planId)} onReject={(reason) => onReject(incident.id, reason)} busy={busy} />
