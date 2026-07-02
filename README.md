@@ -123,7 +123,9 @@ frontend/  React (Vite) dashboard, connects via REST + Socket.IO for live update
 
 ## Running it
 
-Two processes, no external services or API keys required.
+No external services or API keys required. Two ways to run it, depending on your setup:
+
+### Option A — two dev servers (best while actively developing)
 
 ```bash
 # Terminal 1 - backend (port 4000)
@@ -142,6 +144,23 @@ environment — the frontend dev server proxies `/api` and `/socket.io` through 
 the browser only ever needs to reach port 5173; only port 4000 is used for the backend-to-backend
 proxy hop and never needs to be exposed directly). If the backend runs on a non-default host/port,
 set `BACKEND_URL` before starting the frontend, e.g. `BACKEND_URL=http://localhost:4001 npm run dev`.
+
+### Option B — single port (best if a firewall is blocking cross-port/proxy traffic)
+
+Builds the frontend to static files and has the backend serve them directly, so only **one port**
+(4000) is ever involved — nothing needs to be proxied, and only that one port needs to clear a
+firewall.
+
+```bash
+npm run install:all   # installs both backend/ and frontend/ deps
+npm run serve         # builds the frontend, then starts the backend on port 4000
+```
+
+Open http://localhost:4000 — that's the whole app, API and dashboard together. Re-run `npm run
+serve` (or just `npm run build` then `npm start`) after any code change, since it's serving a
+static build rather than hot-reloading.
+
+---
 
 Use the "Simulate Sensor Event" panel to trigger a scenario (fire,
 gas leak, burglary, armed intruder, fall, panic button, or a fall `recovery` signal) in any zone,
