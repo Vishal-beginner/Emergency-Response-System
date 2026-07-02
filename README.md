@@ -137,7 +137,13 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173. Use the "Simulate Sensor Event" panel to trigger a scenario (fire,
+Open http://localhost:5173 (or whatever URL that port is forwarded to, e.g. in a hosted/remote dev
+environment — the frontend dev server proxies `/api` and `/socket.io` through to the backend, so
+the browser only ever needs to reach port 5173; only port 4000 is used for the backend-to-backend
+proxy hop and never needs to be exposed directly). If the backend runs on a non-default host/port,
+set `BACKEND_URL` before starting the frontend, e.g. `BACKEND_URL=http://localhost:4001 npm run dev`.
+
+Use the "Simulate Sensor Event" panel to trigger a scenario (fire,
 gas leak, burglary, armed intruder, fall, panic button, or a fall `recovery` signal) in any zone,
 then just watch — the loop runs on its own from there: replanning as the hazard spreads/moves/
 escalates, executing the updated plan, verifying it, and updating guidance/notifications, all

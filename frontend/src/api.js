@@ -1,9 +1,15 @@
 import { io } from "socket.io-client";
 
-export const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:4000";
+// Defaults to same-origin (relative requests), which the Vite dev server
+// proxies through to the backend -- this is what makes the app work when
+// accessed via a forwarded/proxied URL, not just plain localhost. Set
+// VITE_API_URL only if the backend is hosted on a different origin entirely
+// (e.g. a separate production deployment).
+export const API_BASE = import.meta.env.VITE_API_URL || "";
 
 export function connectSocket() {
-  return io(API_BASE, { transports: ["websocket", "polling"] });
+  const opts = { transports: ["websocket", "polling"] };
+  return API_BASE ? io(API_BASE, opts) : io(opts);
 }
 
 async function request(path, options = {}) {
